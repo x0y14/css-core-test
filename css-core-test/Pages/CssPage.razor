@@ -1,5 +1,47 @@
-﻿<h3>Component1</h3>
+﻿@page "/csspage"
 
-@code {
+<h3>CssCore</h3>
 
+<style>
+
+    @HtmlStyle
+
+    @foreach (var cItem in cssObs)
+    {
+        HtmlStyle += cItem.OutPutStyle();//これ無理矢理感がある。
+    }
+</style>
+
+<ul>
+    @foreach (var cItem in cssObs)
+    {
+    <li>
+        <p class="@cItem.ObjectId">@cItem.ObjectId</p>
+    </li>
+    }
+</ul>
+
+
+<input placeholder="Something id" @bind="newid" />
+<button class="addObj" @onclick=@AddObj>Go</button>
+
+
+@functions
+{
+    public string HtmlStyle = "";
+    private IList<CssObject> cssObs = new List<CssObject>();
+
+    private string newid;
+
+    private void AddObj()
+    {
+        if (!string.IsNullOrWhiteSpace(newid))
+        {
+            var citem = new CssObject(oid: newid);
+            citem.UpdateStyle("color", "red");// 動的にstyle変化できる。
+            cssObs.Add(citem);
+            newid = string.Empty;
+            this.StateHasChanged();
+        }
+    }
 }

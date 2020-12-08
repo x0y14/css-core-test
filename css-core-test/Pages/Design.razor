@@ -1,5 +1,45 @@
-﻿<h3>Component1</h3>
+﻿@page "/design"
+@using System.Threading;
 
-@code {
+<div class="progressBar"></div>
 
+<button class="run_progress" @onclick=@DecreaceProg>Go</button>
+
+
+<style>
+    .progressBar {
+        border-radius: 10px;
+        height: 30px;
+        width: @Progress_Px;
+        background-color: @Progress_color;
+    }
+</style>
+
+@functions
+{
+    private string Progress_color = "blue";
+    private int Progress_Num { get; set; } = 300;
+    private string Progress_Px { get; set; } = "300px";
+
+    @*private IList<CssCoreLib> todos = new List<CssCoreLib>();*@
+
+    async private void DecreaceProg()
+    {
+        do
+        {
+            if (Progress_Num == 0)
+            {
+                Progress_Num = 300;
+                Progress_color = "green";
+            }
+            await Task.Delay(10);
+            Progress_Num--;
+            Progress_Px = $"{Progress_Num}px";
+            if (Progress_Num <= 100)
+            {
+                Progress_color = "red";
+            }
+            this.StateHasChanged();
+        } while (Progress_Num >= 0);
+    }
 }
